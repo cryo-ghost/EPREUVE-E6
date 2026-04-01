@@ -4,7 +4,12 @@ const app = express();
 app.use(express.json());
 
 app.get("/health", (req, res) => {
-  res.json({ status: "ok", timestamp: new Date() });
+  // Conserver le format amélioré
+  res.json({
+    status: "healthy",
+    uptime_seconds: process.uptime(),
+    checked_at: new Date().toISOString()
+  });
 });
 
 app.get("/api/activities", (req, res) => {
@@ -14,10 +19,9 @@ app.get("/api/activities", (req, res) => {
   ]);
 });
 
-// Nouveau endpoint pour ajouter une activité
+// Endpoint pour ajouter une activité
 app.post("/api/activities", (req, res) => {
   const activity = req.body || { id: 2, type: "bike", distance_km: 20 };
-  // Ici on ne persiste pas, on renvoie juste l'objet reçu
   res.status(201).json({ created: true, activity });
 });
 
